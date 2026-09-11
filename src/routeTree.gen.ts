@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicProxyHttpRouteImport } from './routes/api/public/proxy-http'
+import { Route as ApiPublicProxyWsRouteImport } from './routes/api/public/proxy-ws'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicProxyHttpRoute = ApiPublicProxyHttpRouteImport.update({
+  id: '/api/public/proxy-http',
+  path: '/api/public/proxy-http',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicProxyWsRoute = ApiPublicProxyWsRouteImport.update({
+  id: '/api/public/proxy-ws',
+  path: '/api/public/proxy-ws',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/public/proxy-http': typeof ApiPublicProxyHttpRoute
+  '/api/public/proxy-ws': typeof ApiPublicProxyWsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/public/proxy-http': typeof ApiPublicProxyHttpRoute
+  '/api/public/proxy-ws': typeof ApiPublicProxyWsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/public/proxy-http': typeof ApiPublicProxyHttpRoute
+  '/api/public/proxy-ws': typeof ApiPublicProxyWsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/api/public/proxy-http' | '/api/public/proxy-ws'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/public/proxy-http' | '/api/public/proxy-ws'
+  id: '__root__' | '/' | '/api/public/proxy-http' | '/api/public/proxy-ws'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPublicProxyHttpRoute: typeof ApiPublicProxyHttpRoute
+  ApiPublicProxyWsRoute: typeof ApiPublicProxyWsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/proxy-http': {
+      id: '/api/public/proxy-http'
+      path: '/api/public/proxy-http'
+      fullPath: '/api/public/proxy-http'
+      preLoaderRoute: typeof ApiPublicProxyHttpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/proxy-ws': {
+      id: '/api/public/proxy-ws'
+      path: '/api/public/proxy-ws'
+      fullPath: '/api/public/proxy-ws'
+      preLoaderRoute: typeof ApiPublicProxyWsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPublicProxyHttpRoute: ApiPublicProxyHttpRoute,
+  ApiPublicProxyWsRoute: ApiPublicProxyWsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
