@@ -491,6 +491,10 @@ export default function NovaApp() {
       <ProxySiteMenu
         open={proxyMenuOpen}
         onClose={() => setProxyMenuOpen(false)}
+        onSelectProxySite={(site) => {
+          setProxyMenuOpen(false);
+          setProxySite(site);
+        }}
         onSelectNova={() => {
           setNovaTransitioning(true);
           if (novaTransitionTimerRef.current) window.clearTimeout(novaTransitionTimerRef.current);
@@ -500,6 +504,13 @@ export default function NovaApp() {
           }, 2200);
         }}
       />
+      {proxySite && (
+        <ProxyFrameView
+          url={proxySite.url}
+          title={proxySite.label}
+          onBack={() => setProxySite(null)}
+        />
+      )}
       <Dialog open={discordPopupOpen} onOpenChange={setDiscordPopupOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
