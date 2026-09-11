@@ -14,6 +14,7 @@ import { AppsView } from "@/components/nova/AppsView";
 import { LeaderboardView } from "@/components/nova/LeaderboardView";
 import { useUsageTracker, type UsageCategory } from "@/lib/usage";
 import { ProxySiteMenu } from "@/components/nova/ProxySiteMenu";
+import { ProxyFrameView } from "@/components/nova/ProxyFrameView";
 
 import { LoadingScreen } from "@/components/nova/LoadingScreen";
 
@@ -56,6 +57,7 @@ export default function NovaApp() {
   const [booting, setBooting] = useState(true);
   const [splashDone, setSplashDone] = useState(false);
   const [proxyMenuOpen, setProxyMenuOpen] = useState(false);
+  const [proxySite, setProxySite] = useState<{ url: string; label: string } | null>(null);
   const [novaTransitioning, setNovaTransitioning] = useState(false);
   const novaTransitionTimerRef = useRef<number | null>(null);
 
