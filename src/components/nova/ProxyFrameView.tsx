@@ -12,7 +12,7 @@ export function ProxyFrameView({
   onBack: () => void;
 }) {
   useEffect(() => {
-    void initScramjet();
+    void initScramjet("");
   }, []);
 
   const src = useProxySrc(url);
