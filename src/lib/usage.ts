@@ -64,6 +64,7 @@ function addTime(category: UsageCategory, ms: number, newSession: boolean, sessi
   if (newSession) stats.sessions[category] = (stats.sessions[category] ?? 0) + 1;
   if (sessionMs > (stats.best[category] ?? 0)) stats.best[category] = sessionMs;
   write(stats);
+  syncUsageToCloud();
 }
 
 /** Tracks how long the given category stays active (tab visible, view open). */
@@ -168,7 +169,7 @@ async function pushNow() {
     const today = s.daily[todayKey()] ?? {};
     const todayMs =
       (today.classroom ?? 0) + (today.media ?? 0) + (today.tiktok ?? 0);
-    await supabase.from("usage_stats").upsert(
+    const { error } = await supabase.from("usage_stats").upsert(
       {
         user_id: uid,
         classroom_ms: Math.round(s.totals.classroom ?? 0),
@@ -182,14 +183,21 @@ async function pushNow() {
       },
       { onConflict: "user_id" },
     );
-  } catch {}
+    if (error) {
+      console.error("Couldn't update leaderboard:", error.message);
+      return;
+    }
+    window.dispatchEvent(new CustomEvent("nova-leaderboard-updated"));
+  } catch (error) {
+    console.error("Couldn't update leaderboard:", error);
+  }
 }
 
-/** Push local stats to the shared leaderboard, at most once every 15s. */
+/** Push local stats to the shared leaderboard, at most once every 5s. */
 export function syncUsageToCloud() {
   if (typeof window === "undefined") return;
   const since = Date.now() - lastPush;
-  if (since >= 15000) {
+  if (since >= 5000) {
     void pushNow();
     return;
   }
@@ -197,7 +205,7 @@ export function syncUsageToCloud() {
   pushTimer = window.setTimeout(() => {
     pushTimer = null;
     void pushNow();
-  }, 15000 - since);
+  }, 5000 - since);
 }
 
 /** Live list of everyone's usage, joined with their profile. */
@@ -213,22 +221,18 @@ export function useLeaderboard() {
         const { supabase } = await import("@/integrations/supabase/client");
         const { data: auth } = await supabase.auth.getUser();
         if (alive) setMeId(auth.user?.id ?? null);
-        const [{ data: rows }, { data: profiles }] = await Promise.all([
-          supabase.from("usage_stats").select("*"),
-          supabase.from("profiles").select("id, username, display_name, avatar_url"),
-        ]);
+        const { data: rows, error } = await supabase.rpc("get_leaderboard");
+        if (error) throw error;
         if (!alive) return;
-        const byId = new Map((profiles ?? []).map((p) => [p.id, p]));
         const list: LeaderboardEntry[] = (rows ?? []).map((r) => {
-          const p = byId.get(r.user_id);
           const classroom = Number(r.classroom_ms ?? 0);
           const media = Number(r.media_ms ?? 0);
           const tiktok = Number(r.tiktok_ms ?? 0);
           return {
             userId: r.user_id,
-            username: p?.username ?? "Unknown",
-            displayName: p?.display_name ?? null,
-            avatarUrl: p?.avatar_url ?? null,
+            username: r.username ?? "Unknown",
+            displayName: r.display_name ?? null,
+            avatarUrl: r.avatar_url ?? null,
             classroom,
             media,
             tiktok,
@@ -240,14 +244,18 @@ export function useLeaderboard() {
         });
         list.sort((a, b) => b.total - a.total);
         setEntries(list);
-      } catch {}
+      } catch (error) {
+        console.error("Couldn't load leaderboard:", error);
+      }
       if (alive) setLoading(false);
     };
     void load();
     const id = window.setInterval(load, 15000);
+    window.addEventListener("nova-leaderboard-updated", load);
     return () => {
       alive = false;
       window.clearInterval(id);
+      window.removeEventListener("nova-leaderboard-updated", load);
     };
   }, []);
 
