@@ -340,6 +340,10 @@ export default function NovaApp() {
         <ProxySiteMenu
           open={proxyMenuOpen}
           onClose={() => setProxyMenuOpen(false)}
+          onSelectProxySite={(site) => {
+            setProxyMenuOpen(false);
+            setProxySite(site);
+          }}
           onSelectNova={() => {
             // Only now load Nova: show the loading screen, then unlock and
             // reset the proxy engine so Nova always starts clean.
@@ -356,6 +360,13 @@ export default function NovaApp() {
             }, 4500);
           }}
         />
+        {proxySite && (
+          <ProxyFrameView
+            url={proxySite.url}
+            title={proxySite.label}
+            onBack={() => setProxySite(null)}
+          />
+        )}
         <Toaster richColors position="bottom-right" theme={settings.theme} />
       </>
     );
