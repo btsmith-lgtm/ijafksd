@@ -18,7 +18,7 @@ export function ProxyFrameView({
   const src = useProxySrc(url);
 
   return (
-    <div className="fixed inset-0 z-40 flex flex-col bg-background">
+    <div className="fixed inset-0 z-[60] flex flex-col bg-background">
       <div className="flex items-center gap-2 border-b border-white/10 px-3 py-2">
         <button
           onClick={onBack}
