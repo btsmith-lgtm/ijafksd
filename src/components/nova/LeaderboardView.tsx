@@ -10,6 +10,11 @@ export function LeaderboardView() {
   const grandTotal = entries.reduce((s, e) => s + e.total, 0);
   const todayTotal = entries.reduce((s, e) => s + e.today, 0);
 
+  const myIndex = entries.findIndex((e) => e.userId === meId);
+  const me = myIndex >= 0 ? entries[myIndex] : null;
+  const ahead = myIndex > 0 ? entries[myIndex - 1] : null;
+  const gap = me && ahead ? ahead.total - me.total : 0;
+
   return (
     <div className="h-full overflow-y-auto p-6 md:p-10">
       <div className="mx-auto flex max-w-4xl flex-col gap-8">
@@ -18,7 +23,7 @@ export function LeaderboardView() {
             <span className="gradient-text">Leaderboard</span>
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Everyone's time across Games, Movies and TikTok.
+            Everyone's time across Games, Movies and TikTok, ranked 1st to last.
           </p>
         </div>
 
@@ -27,6 +32,33 @@ export function LeaderboardView() {
           <Stat label="Total time" value={formatDuration(grandTotal)} />
           <Stat label="Today" value={formatDuration(todayTotal)} />
         </div>
+
+        {me && (
+          <div
+            className="glass rounded-2xl p-5 ring-1 ring-primary/60"
+            style={{ borderRadius: "var(--radius)" }}
+          >
+            <div className="text-[11px] uppercase tracking-widest text-muted-foreground">
+              Your standing
+            </div>
+            <div className="mt-2 flex flex-wrap items-end gap-x-6 gap-y-2">
+              <div className="font-mono text-3xl font-semibold tabular-nums">
+                #{myIndex + 1}
+                <span className="ml-1 text-sm text-muted-foreground">
+                  of {entries.length}
+                </span>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {formatDuration(me.total)} total · {formatDuration(me.today)} today
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {ahead
+                ? `${formatDuration(gap)} behind ${ahead.displayName?.trim() || ahead.username} in #${myIndex}.`
+                : "You're in first place — nice."}
+            </p>
+          </div>
+        )}
 
         <div className="flex flex-col gap-3">
           {entries.map((e, i) => {
@@ -39,7 +71,13 @@ export function LeaderboardView() {
                 style={{ borderRadius: "var(--radius)" }}
               >
                 <div className="flex items-center gap-3">
-                  <span className="w-7 text-center text-lg">{MEDALS[i] ?? i + 1}</span>
+                  <span className="flex w-10 shrink-0 flex-col items-center">
+                    <span className="text-lg leading-none">{MEDALS[i] ?? "•"}</span>
+                    <span className="mt-0.5 font-mono text-xs font-semibold tabular-nums text-muted-foreground">
+                      #{i + 1}
+                    </span>
+                  </span>
+
                   {e.avatarUrl ? (
                     <img
                       src={e.avatarUrl}
