@@ -12,7 +12,7 @@ import { FullscreenButton } from "./FullscreenButton";
 
 const MENU_TABS = [
   { id: "selenite", label: "Selenite", url: "https://selenite.cc/projects.html" },
-  { id: "cinesteam", label: "PC Games", url: "https://ghostcloud.ghostos.workers.dev" },
+  { id: "cinesteam", label: "PC Games", url: "https://ghostcloud-eight.vercel.app" },
   { id: "noah", label: "Noah's Tutoring", url: "https://ibu.openchain.pt/" },
   { id: "strictly", label: "Strictly Math", url: "https://strictlymath.cc" },
   { id: "quackprep", label: "QuackPrep", url: "https://quackprep.org" },
