@@ -1,24 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
+import NovaApp from "@/components/nova/NovaApp";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "The World's Best Information on the American Revolution" },
+      {
+        name: "description",
+        content:
+          "The world's best information on the American Revolution — explore history, key figures, battles, and founding documents all in one place.",
+      },
+      { property: "og:title", content: "The World's Best Information on the American Revolution" },
+      {
+        property: "og:description",
+        content:
+          "The world's best information on the American Revolution — explore history, key figures, battles, and founding documents all in one place.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://uhfedsjvn.lovable.app" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "https://uhfedsjvn.lovable.app" }],
+  }),
+  component: NovaApp,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
