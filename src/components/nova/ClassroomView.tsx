@@ -18,6 +18,7 @@ const MENU_TABS = [
   { id: "quackprep", label: "QuackPrep", url: "https://quackprep.org" },
   { id: "kizi", label: "Kizi", url: "https://kizi.com" },
   { id: "dubdoo", label: "Dubdoo", url: "https://dubdoo.com" },
+  { id: "studysync", label: "StudySync", url: "https://studysync.co.uk/" },
 ] as const;
 
 const BUTTON_TABS = [
