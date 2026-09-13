@@ -1,4 +1,4 @@
-import { Globe, ExternalLink, MonitorPlay } from "lucide-react";
+import { Globe, ExternalLink, MonitorPlay, Tv } from "lucide-react";
 
 type Site = {
   id: string;
@@ -24,6 +24,14 @@ const SITES: Site[] = [
     url: "https://cineosweb.github.io",
     proxy: true,
     icon: MonitorPlay,
+  },
+  {
+    id: "beez",
+    label: "Beez",
+    description: "Opens here through the proxy",
+    url: "https://9-16-beez.b-cdn.net/",
+    proxy: true,
+    icon: Tv,
   },
   {
     id: "opium",
