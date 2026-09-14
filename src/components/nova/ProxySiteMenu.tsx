@@ -1,4 +1,4 @@
-import { Globe, ExternalLink, MonitorPlay, Tv } from "lucide-react";
+import { Globe, ExternalLink, MonitorPlay, Tv, GraduationCap } from "lucide-react";
 
 type Site = {
   id: string;
