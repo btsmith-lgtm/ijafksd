@@ -34,6 +34,14 @@ const SITES: Site[] = [
     icon: Tv,
   },
   {
+    id: "noah",
+    label: "Noah's Tutoring",
+    description: "Opens here through the proxy",
+    url: "https://ibu.openchain.pt/",
+    proxy: true,
+    icon: GraduationCap,
+  },
+  {
     id: "opium",
     label: "Opium",
     description: "Clever Learning",
