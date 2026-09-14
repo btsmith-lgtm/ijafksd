@@ -15,10 +15,9 @@ const MENU_TABS = [
   { id: "strictly", label: "Strictly Math", url: "https://strictlymath.cc" },
   { id: "studysync", label: "StudySync", url: "https://studysync.co.uk/" },
   { id: "cinesteam", label: "PC Games", url: "https://ghostcloud-eight.vercel.app" },
-  { id: "noah", label: "Noah's Tutoring", url: "https://ibu.openchain.pt/" },
+  { id: "genizymath", label: "Genizy Math", url: "https://genizymath.github.io" },
   { id: "quackprep", label: "QuackPrep", url: "https://quackprep.org" },
   { id: "dubdoo", label: "Dubdoo", url: "https://dubdoo.com" },
-  { id: "genizymath", label: "Genizy Math", url: "https://genizymath.github.io" },
 ] as const;
 
 const BUTTON_TABS = [
