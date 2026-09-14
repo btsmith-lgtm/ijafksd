@@ -1,23 +1,52 @@
-import { ExternalLink } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { RotateCcw } from "lucide-react";
+import { initScramjet, useProxySrc } from "@/lib/scramjet";
+import { FullscreenButton } from "./FullscreenButton";
 
-export function AIView({ onOpen }: { onOpen: (url: string) => void }) {
+const AI_URL = "https://use.celoai.org";
+
+export function AIView() {
+  const [frameKey, setFrameKey] = useState(0);
+  const src = useProxySrc(AI_URL, frameKey);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    void initScramjet("");
+  }, []);
+
   return (
-    <div
-      className="flex h-full w-full flex-col items-center justify-center gap-4 overflow-hidden bg-card/40 p-8 text-center"
-      style={{ borderRadius: "var(--radius)" }}
-    >
-      <h2 className="text-2xl font-semibold text-foreground">Arena AI</h2>
-      <p className="max-w-md text-sm text-muted-foreground">
-        arena.ai blocks direct embedding, so it opens in the Nova browser instead.
-      </p>
-      <button
-        type="button"
-        onClick={() => onOpen("https://arena.ai")}
-        className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+    <div className="flex h-full min-h-0 flex-col p-3">
+      <div className="mb-2 flex items-center justify-end gap-2">
+        <button
+          onClick={() => setFrameKey((k) => k + 1)}
+          className="inline-flex items-center gap-2 rounded-lg bg-secondary px-3 py-1.5 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
+          aria-label="Reload"
+        >
+          <RotateCcw className="h-4 w-4" />
+          Reload
+        </button>
+        <FullscreenButton containerRef={containerRef} />
+      </div>
+      <div
+        ref={containerRef}
+        className="glass flex-1 min-h-0 overflow-hidden rounded-2xl"
+        style={{ borderRadius: "var(--radius)" }}
       >
-        Open in Nova Browser
-        <ExternalLink className="h-4 w-4" />
-      </button>
+        {src ? (
+          <iframe
+            key={`ai-${frameKey}`}
+            src={src}
+            title="Celo AI"
+            className="h-full w-full border-0 bg-background"
+            sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div className="grid h-full w-full place-items-center text-sm text-muted-foreground">
+            Connecting to proxy…
+          </div>
+        )}
+      </div>
     </div>
   );
 }
