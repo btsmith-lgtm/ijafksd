@@ -12,12 +12,13 @@ import { FullscreenButton } from "./FullscreenButton";
 
 const MENU_TABS = [
   { id: "selenite", label: "Selenite", url: "https://selenite.cc/projects.html" },
-  { id: "strictly", label: "Strictly Math", url: "https://strictlymath.cc" },
-  { id: "studysync", label: "StudySync", url: "https://studysync.co.uk/" },
   { id: "cinesteam", label: "PC Games", url: "https://ghostcloud-eight.vercel.app" },
-  { id: "genizymath", label: "Genizy Math", url: "https://genizymath.github.io" },
+  { id: "noah", label: "Noah's Tutoring", url: "https://ibu.openchain.pt/" },
+  { id: "strictly", label: "Strictly Math", url: "https://strictlymath.cc" },
   { id: "quackprep", label: "QuackPrep", url: "https://quackprep.org" },
+  { id: "kizi", label: "Kizi", url: "https://kizi.com" },
   { id: "dubdoo", label: "Dubdoo", url: "https://dubdoo.com" },
+  { id: "studysync", label: "StudySync", url: "https://studysync.co.uk/" },
 ] as const;
 
 const BUTTON_TABS = [

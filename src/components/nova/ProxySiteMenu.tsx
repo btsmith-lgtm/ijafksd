@@ -1,4 +1,4 @@
-import { Globe, ExternalLink, MonitorPlay, Tv, GraduationCap } from "lucide-react";
+import { Globe, ExternalLink, MonitorPlay, Tv } from "lucide-react";
 
 type Site = {
   id: string;
@@ -32,14 +32,6 @@ const SITES: Site[] = [
     url: "https://9-16-beez.b-cdn.net/",
     proxy: true,
     icon: Tv,
-  },
-  {
-    id: "noah",
-    label: "Noah's Tutoring",
-    description: "Opens here through the proxy",
-    url: "https://ibu.openchain.pt/",
-    proxy: true,
-    icon: GraduationCap,
   },
   {
     id: "opium",

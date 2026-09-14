@@ -9,8 +9,9 @@ const items: { id: View; label: string; icon: React.ComponentType<{ className?: 
   { id: "media", label: "Movies", icon: Film },
   { id: "classroom", label: "Games", icon: Gamepad2 },
   { id: "tiktok", label: "TikTok", icon: Music2 },
-  { id: "ai", label: "AI", icon: Sparkles },
   { id: "leaderboard", label: "Leaderboard", icon: Trophy },
+  
+  { id: "ai", label: "AI", icon: Sparkles },
   { id: "apps", label: "Apps", icon: LayoutGrid },
   { id: "settings", label: "Settings", icon: Settings },
 ];
