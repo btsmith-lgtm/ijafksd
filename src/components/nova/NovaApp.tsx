@@ -471,7 +471,7 @@ export default function NovaApp() {
             ["media", <MediaView />],
             ["classroom", <ClassroomView />],
             ["tiktok", <TikTokView />],
-            ["ai", <AIView onOpen={openUrl} />],
+            ["ai", <AIView />],
             ["apps", <AppsView onOpen={openUrl} />],
             ["leaderboard", <LeaderboardView />],
             
