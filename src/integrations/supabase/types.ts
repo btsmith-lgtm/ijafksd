@@ -14,16 +14,190 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leaderboard_notice: {
+        Row: {
+          id: number
+          message: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: number
+          message?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          id?: number
+          message?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          ban_message: string | null
+          banned_at: string | null
+          banned_until: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          ban_message?: string | null
+          banned_at?: string | null
+          banned_until?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          ban_message?: string | null
+          banned_at?: string | null
+          banned_until?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      usage_stats: {
+        Row: {
+          best_ms: number
+          classroom_ms: number
+          created_at: string
+          media_ms: number
+          sessions: number
+          tiktok_ms: number
+          today_date: string | null
+          today_ms: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          best_ms?: number
+          classroom_ms?: number
+          created_at?: string
+          media_ms?: number
+          sessions?: number
+          tiktok_ms?: number
+          today_date?: string | null
+          today_ms?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          best_ms?: number
+          classroom_ms?: number
+          created_at?: string
+          media_ms?: number
+          sessions?: number
+          tiktok_ms?: number
+          today_date?: string | null
+          today_ms?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          bookmarks: Json
+          created_at: string
+          history: Json
+          settings: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bookmarks?: Json
+          created_at?: string
+          history?: Json
+          settings?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bookmarks?: Json
+          created_at?: string
+          history?: Json
+          settings?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      admin_ban_user: {
+        Args: { _message: string; _minutes: number; _user_id: string }
+        Returns: undefined
+      }
+      admin_set_notice: { Args: { _message: string }; Returns: undefined }
+      admin_unban_user: { Args: { _user_id: string }; Returns: undefined }
+      get_leaderboard: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          ban_message: string
+          banned_until: string
+          best_ms: number
+          classroom_ms: number
+          display_name: string
+          is_admin: boolean
+          media_ms: number
+          sessions: number
+          tiktok_ms: number
+          today_date: string
+          today_ms: number
+          user_id: string
+          username: string
+        }[]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +324,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
