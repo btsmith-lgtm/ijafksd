@@ -153,6 +153,9 @@ export type LeaderboardEntry = {
   today: number;
   sessions: number;
   best: number;
+  bannedUntil: string | null;
+  banMessage: string | null;
+  isAdmin: boolean;
 };
 
 let lastPush = 0;
@@ -240,6 +243,9 @@ export function useLeaderboard() {
             today: r.today_date === todayKey() ? Number(r.today_ms ?? 0) : 0,
             sessions: Number(r.sessions ?? 0),
             best: Number(r.best_ms ?? 0),
+            bannedUntil: (r as { banned_until?: string | null }).banned_until ?? null,
+            banMessage: (r as { ban_message?: string | null }).ban_message ?? null,
+            isAdmin: Boolean((r as { is_admin?: boolean }).is_admin),
           };
         });
         list.sort((a, b) => b.total - a.total);

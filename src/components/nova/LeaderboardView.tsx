@@ -1,10 +1,79 @@
-import { Trophy, Gamepad2, Film, Music2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Trophy, Gamepad2, Film, Music2, ShieldAlert, Megaphone, ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
 import { formatDuration, useLeaderboard } from "@/lib/usage";
+import {
+  banUser,
+  formatBanLength,
+  banEndMs,
+  isBanActive,
+  unbanUser,
+  useIsAdmin,
+  useLeaderboardNotice,
+} from "@/lib/admin";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 
+const DURATIONS: { label: string; minutes: number | null }[] = [
+  { label: "5 minutes", minutes: 5 },
+  { label: "30 minutes", minutes: 30 },
+  { label: "1 hour", minutes: 60 },
+  { label: "1 day", minutes: 60 * 24 },
+  { label: "1 week", minutes: 60 * 24 * 7 },
+  { label: "Forever", minutes: null },
+];
+
 export function LeaderboardView() {
   const { entries, meId, loading } = useLeaderboard();
+  const isAdmin = useIsAdmin(meId);
+  const { message: notice, save: saveNotice } = useLeaderboardNotice();
+  const [noticeDraft, setNoticeDraft] = useState("");
+  const [noticeTouched, setNoticeTouched] = useState(false);
+  const [openFor, setOpenFor] = useState<string | null>(null);
+  const [duration, setDuration] = useState<string>("60");
+  const [customMinutes, setCustomMinutes] = useState("");
+  const [banMessage, setBanMessage] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!noticeTouched) setNoticeDraft(notice);
+  }, [notice, noticeTouched]);
+
+  const doBan = async (userId: string) => {
+    setBusy(true);
+    try {
+      const minutes =
+        duration === "custom"
+          ? Math.max(1, Number(customMinutes) || 0)
+          : duration === "forever"
+            ? null
+            : Number(duration);
+      if (duration === "custom" && (!customMinutes || Number(customMinutes) <= 0)) {
+        toast.error("Enter how many minutes the ban should last");
+        return;
+      }
+      await banUser(userId, minutes, banMessage.trim());
+      toast.success("Ban applied");
+      setOpenFor(null);
+      setBanMessage("");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't ban that person");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const doUnban = async (userId: string) => {
+    setBusy(true);
+    try {
+      await unbanUser(userId);
+      toast.success("Ban lifted");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't lift that ban");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const max = Math.max(1, ...entries.map((e) => e.total));
   const grandTotal = entries.reduce((s, e) => s + e.total, 0);
@@ -26,6 +95,72 @@ export function LeaderboardView() {
             Everyone's time across Games, Movies and TikTok, ranked 1st to last.
           </p>
         </div>
+
+        {notice.trim() && (
+          <div
+            className="glass flex items-start gap-3 rounded-2xl p-4 ring-1 ring-primary/50"
+            style={{ borderRadius: "var(--radius)" }}
+          >
+            <Megaphone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+            <p className="whitespace-pre-wrap text-sm">{notice}</p>
+          </div>
+        )}
+
+        {isAdmin && (
+          <div className="glass rounded-2xl p-5" style={{ borderRadius: "var(--radius)" }}>
+            <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" /> Admin tools
+            </div>
+            <label className="mt-3 block text-sm font-medium">Leaderboard message</label>
+            <textarea
+              value={noticeDraft}
+              onChange={(e) => {
+                setNoticeDraft(e.target.value);
+                setNoticeTouched(true);
+              }}
+              rows={2}
+              placeholder="Say something to everyone…"
+              className="mt-2 w-full resize-y rounded-lg bg-white/[0.05] px-3 py-2 text-sm outline-none ring-1 ring-white/10 focus:ring-primary"
+            />
+            <div className="mt-2 flex gap-2">
+              <button
+                type="button"
+                disabled={busy}
+                onClick={async () => {
+                  try {
+                    await saveNotice(noticeDraft);
+                    setNoticeTouched(false);
+                    toast.success("Message posted");
+                  } catch (err) {
+                    toast.error(err instanceof Error ? err.message : "Couldn't post that");
+                  }
+                }}
+                className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
+              >
+                Post message
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    await saveNotice("");
+                    setNoticeDraft("");
+                    setNoticeTouched(false);
+                    toast.success("Message cleared");
+                  } catch (err) {
+                    toast.error(err instanceof Error ? err.message : "Couldn't clear that");
+                  }
+                }}
+                className="rounded-lg bg-white/[0.06] px-3 py-1.5 text-xs font-semibold ring-1 ring-white/10"
+              >
+                Clear
+              </button>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Use the Ban button on anyone below to block them for any length of time.
+            </p>
+          </div>
+        )}
 
         <div className="grid gap-4 sm:grid-cols-3">
           <Stat label="Players" value={String(entries.length)} />
@@ -64,6 +199,7 @@ export function LeaderboardView() {
           {entries.map((e, i) => {
             const name = e.displayName?.trim() || e.username;
             const isMe = e.userId === meId;
+            const banned = isBanActive(e.bannedUntil);
             return (
               <div
                 key={e.userId}
@@ -122,10 +258,88 @@ export function LeaderboardView() {
                   />
                 </div>
 
-                <div className="mt-2 flex gap-4 text-[11px] text-muted-foreground">
+                <div className="mt-2 flex flex-wrap items-center gap-4 text-[11px] text-muted-foreground">
                   <span>{e.sessions} {e.sessions === 1 ? "visit" : "visits"}</span>
                   <span>longest {formatDuration(e.best)}</span>
+                  {banned && (
+                    <span className="inline-flex items-center gap-1 text-destructive">
+                      <ShieldAlert className="h-3 w-3" />
+                      Banned · {formatBanLength(Math.max(0, (banEndMs(e.bannedUntil) ?? 0) - Date.now()))} left
+                    </span>
+                  )}
+                  {e.isAdmin && <span className="text-primary">admin</span>}
                 </div>
+
+                {isAdmin && !isMe && (
+                  <div className="mt-3 border-t border-white/10 pt-3">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setOpenFor(openFor === e.userId ? null : e.userId)}
+                        className="rounded-lg bg-white/[0.06] px-3 py-1.5 text-xs font-semibold ring-1 ring-white/10"
+                      >
+                        {openFor === e.userId ? "Cancel" : banned ? "Change ban" : "Ban"}
+                      </button>
+                      {banned && (
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() => void doUnban(e.userId)}
+                          className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
+                        >
+                          Unban
+                        </button>
+                      )}
+                    </div>
+
+                    {openFor === e.userId && (
+                      <div className="mt-3 flex flex-col gap-2">
+                        <div className="flex flex-wrap gap-2">
+                          <select
+                            value={duration}
+                            onChange={(ev) => setDuration(ev.target.value)}
+                            className="rounded-lg bg-white/[0.05] px-3 py-1.5 text-xs outline-none ring-1 ring-white/10 focus:ring-primary"
+                          >
+                            {DURATIONS.map((d) => (
+                              <option
+                                key={d.label}
+                                value={d.minutes === null ? "forever" : String(d.minutes)}
+                              >
+                                {d.label}
+                              </option>
+                            ))}
+                            <option value="custom">Custom (minutes)</option>
+                          </select>
+                          {duration === "custom" && (
+                            <input
+                              type="number"
+                              min={1}
+                              value={customMinutes}
+                              onChange={(ev) => setCustomMinutes(ev.target.value)}
+                              placeholder="Minutes"
+                              className="w-28 rounded-lg bg-white/[0.05] px-3 py-1.5 text-xs outline-none ring-1 ring-white/10 focus:ring-primary"
+                            />
+                          )}
+                        </div>
+                        <textarea
+                          value={banMessage}
+                          onChange={(ev) => setBanMessage(ev.target.value)}
+                          rows={2}
+                          placeholder="Message shown to them (optional)"
+                          className="w-full resize-y rounded-lg bg-white/[0.05] px-3 py-2 text-xs outline-none ring-1 ring-white/10 focus:ring-primary"
+                        />
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() => void doBan(e.userId)}
+                          className="self-start rounded-lg bg-destructive px-3 py-1.5 text-xs font-semibold text-destructive-foreground"
+                        >
+                          Apply ban
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
