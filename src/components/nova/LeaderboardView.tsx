@@ -1,10 +1,79 @@
-import { Trophy, Gamepad2, Film, Music2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Trophy, Gamepad2, Film, Music2, ShieldAlert, Megaphone, ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
 import { formatDuration, useLeaderboard } from "@/lib/usage";
+import {
+  banUser,
+  formatBanLength,
+  banEndMs,
+  isBanActive,
+  unbanUser,
+  useIsAdmin,
+  useLeaderboardNotice,
+} from "@/lib/admin";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 
+const DURATIONS: { label: string; minutes: number | null }[] = [
+  { label: "5 minutes", minutes: 5 },
+  { label: "30 minutes", minutes: 30 },
+  { label: "1 hour", minutes: 60 },
+  { label: "1 day", minutes: 60 * 24 },
+  { label: "1 week", minutes: 60 * 24 * 7 },
+  { label: "Forever", minutes: null },
+];
+
 export function LeaderboardView() {
   const { entries, meId, loading } = useLeaderboard();
+  const isAdmin = useIsAdmin(meId);
+  const { message: notice, save: saveNotice } = useLeaderboardNotice();
+  const [noticeDraft, setNoticeDraft] = useState("");
+  const [noticeTouched, setNoticeTouched] = useState(false);
+  const [openFor, setOpenFor] = useState<string | null>(null);
+  const [duration, setDuration] = useState<string>("60");
+  const [customMinutes, setCustomMinutes] = useState("");
+  const [banMessage, setBanMessage] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!noticeTouched) setNoticeDraft(notice);
+  }, [notice, noticeTouched]);
+
+  const doBan = async (userId: string) => {
+    setBusy(true);
+    try {
+      const minutes =
+        duration === "custom"
+          ? Math.max(1, Number(customMinutes) || 0)
+          : duration === "forever"
+            ? null
+            : Number(duration);
+      if (duration === "custom" && (!customMinutes || Number(customMinutes) <= 0)) {
+        toast.error("Enter how many minutes the ban should last");
+        return;
+      }
+      await banUser(userId, minutes, banMessage.trim());
+      toast.success("Ban applied");
+      setOpenFor(null);
+      setBanMessage("");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't ban that person");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const doUnban = async (userId: string) => {
+    setBusy(true);
+    try {
+      await unbanUser(userId);
+      toast.success("Ban lifted");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't lift that ban");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const max = Math.max(1, ...entries.map((e) => e.total));
   const grandTotal = entries.reduce((s, e) => s + e.total, 0);
