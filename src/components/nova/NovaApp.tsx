@@ -35,8 +35,10 @@ import { initScramjet, resetProxy } from "@/lib/scramjet";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthPanel } from "@/components/nova/AuthPanel";
+import { BannedScreen } from "@/components/nova/BannedScreen";
 import { SkywardGate } from "@/components/nova/SkywardGate";
 import { loadCloudState, useCloudSettingsSync } from "@/lib/cloudSync";
+import { useMyBan } from "@/lib/admin";
 
 
 export type View = "home" | "browser" | "bookmarks" | "history" | "downloads" | "settings" | "media" | "classroom" | "tiktok" | "ai" | "apps" | "leaderboard";
