@@ -194,8 +194,19 @@ export function LeaderboardView() {
           </div>
         )}
 
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search people…"
+            className="w-full rounded-xl bg-white/[0.05] py-2.5 pl-10 pr-3 text-sm outline-none ring-1 ring-white/10 focus:ring-primary"
+          />
+        </div>
+
         <div className="flex flex-col gap-3">
-          {entries.map((e, i) => {
+          {visible.map((e) => {
+            const i = entries.findIndex((x) => x.userId === e.userId);
             const name = e.displayName?.trim() || e.username;
             const isMe = e.userId === meId;
             const banned = isBanActive(e.bannedUntil);
