@@ -105,22 +105,12 @@ export function LeaderboardView() {
           </p>
         </div>
 
-        {notice.trim() && (
-          <div
-            className="glass flex items-start gap-3 rounded-2xl p-4 ring-1 ring-primary/50"
-            style={{ borderRadius: "var(--radius)" }}
-          >
-            <Megaphone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-            <p className="whitespace-pre-wrap text-sm">{notice}</p>
-          </div>
-        )}
-
         {isAdmin && (
           <div className="glass rounded-2xl p-5" style={{ borderRadius: "var(--radius)" }}>
             <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" /> Admin tools
             </div>
-            <label className="mt-3 block text-sm font-medium">Leaderboard message</label>
+            <label className="mt-3 block text-sm font-medium">Broadcast message</label>
             <textarea
               value={noticeDraft}
               onChange={(e) => {
