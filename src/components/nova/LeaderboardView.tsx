@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Trophy, Gamepad2, Film, Music2, ShieldAlert, Megaphone, ShieldCheck } from "lucide-react";
+import { Trophy, Gamepad2, Film, Music2, ShieldAlert, Search, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { formatDuration, useLeaderboard } from "@/lib/usage";
 import {
@@ -33,6 +33,7 @@ export function LeaderboardView() {
   const [duration, setDuration] = useState<string>("60");
   const [customMinutes, setCustomMinutes] = useState("");
   const [banMessage, setBanMessage] = useState("");
+  const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -78,6 +79,14 @@ export function LeaderboardView() {
   const max = Math.max(1, ...entries.map((e) => e.total));
   const grandTotal = entries.reduce((s, e) => s + e.total, 0);
   const todayTotal = entries.reduce((s, e) => s + e.today, 0);
+
+  const q = search.trim().toLowerCase();
+  const visible = q
+    ? entries.filter((e) =>
+        (e.displayName?.trim() || e.username).toLowerCase().includes(q) ||
+        e.username.toLowerCase().includes(q),
+      )
+    : entries;
 
   const myIndex = entries.findIndex((e) => e.userId === meId);
   const me = myIndex >= 0 ? entries[myIndex] : null;
