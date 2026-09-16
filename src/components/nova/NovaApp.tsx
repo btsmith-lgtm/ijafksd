@@ -402,6 +402,12 @@ export default function NovaApp() {
 
   return (
     <div className={`flex h-dvh w-full overflow-hidden ${settings.animations ? "" : "[&_*]:!animate-none [&_*]:!transition-none"}`}>
+      {myBan && (
+        <BannedScreen
+          ban={myBan}
+          username={(session.user.user_metadata?.username as string | undefined) ?? null}
+        />
+      )}
       <LiveWallpaper id={(settings.liveWallpaper ?? "") as LiveWallpaperId} />
       {settings.sidebarPos === "left" && sidebar}
       <main className="relative flex min-w-0 flex-1 flex-col">
