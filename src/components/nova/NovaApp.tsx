@@ -69,6 +69,7 @@ export default function NovaApp() {
   const [authReady, setAuthReady] = useState(false);
   const userId = session?.user.id ?? null;
   const [cloudReady, setCloudReady] = useState(false);
+  const myBan = useMyBan(userId);
 
   // Discord popup shown once after the Nova loading screen finishes.
   const [discordPopupOpen, setDiscordPopupOpen] = useState(false);
