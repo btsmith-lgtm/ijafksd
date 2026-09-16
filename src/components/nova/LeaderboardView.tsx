@@ -156,7 +156,7 @@ export function LeaderboardView() {
               </button>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Use the Ban button on anyone below to block them for any length of time.
+              A posted message covers everyone's screen until you clear it. Use the Ban button below to block someone for any length of time.
             </p>
           </div>
         )}
