@@ -36,6 +36,7 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthPanel } from "@/components/nova/AuthPanel";
 import { BannedScreen } from "@/components/nova/BannedScreen";
+import { GlobalNotice } from "@/components/nova/GlobalNotice";
 import { SkywardGate } from "@/components/nova/SkywardGate";
 import { loadCloudState, useCloudSettingsSync } from "@/lib/cloudSync";
 import { useMyBan } from "@/lib/admin";
