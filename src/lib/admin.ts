@@ -141,7 +141,7 @@ export function useLeaderboardNotice() {
 export async function banUser(userId: string, minutes: number | null, message: string) {
   const { error } = await supabase.rpc("admin_ban_user", {
     _user_id: userId,
-    _minutes: minutes,
+    _minutes: minutes as unknown as number,
     _message: message,
   });
   if (error) throw new Error(error.message);

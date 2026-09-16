@@ -35,8 +35,10 @@ import { initScramjet, resetProxy } from "@/lib/scramjet";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthPanel } from "@/components/nova/AuthPanel";
+import { BannedScreen } from "@/components/nova/BannedScreen";
 import { SkywardGate } from "@/components/nova/SkywardGate";
 import { loadCloudState, useCloudSettingsSync } from "@/lib/cloudSync";
+import { useMyBan } from "@/lib/admin";
 
 
 export type View = "home" | "browser" | "bookmarks" | "history" | "downloads" | "settings" | "media" | "classroom" | "tiktok" | "ai" | "apps" | "leaderboard";
@@ -67,6 +69,7 @@ export default function NovaApp() {
   const [authReady, setAuthReady] = useState(false);
   const userId = session?.user.id ?? null;
   const [cloudReady, setCloudReady] = useState(false);
+  const myBan = useMyBan(userId);
 
   // Discord popup shown once after the Nova loading screen finishes.
   const [discordPopupOpen, setDiscordPopupOpen] = useState(false);
@@ -399,6 +402,12 @@ export default function NovaApp() {
 
   return (
     <div className={`flex h-dvh w-full overflow-hidden ${settings.animations ? "" : "[&_*]:!animate-none [&_*]:!transition-none"}`}>
+      {myBan && (
+        <BannedScreen
+          ban={myBan}
+          username={(session.user.user_metadata?.username as string | undefined) ?? null}
+        />
+      )}
       <LiveWallpaper id={(settings.liveWallpaper ?? "") as LiveWallpaperId} />
       {settings.sidebarPos === "left" && sidebar}
       <main className="relative flex min-w-0 flex-1 flex-col">
