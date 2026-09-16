@@ -7,7 +7,7 @@ import { LiveWallpaper, liveWallpapers, type LiveWallpaperId } from "@/component
 import { resetProxy } from "@/lib/scramjet";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { UserRound, Camera, KeyRound, Save, Loader2 } from "lucide-react";
+import { UserRound, Camera, KeyRound, Save, Loader2, LogOut } from "lucide-react";
 
 const wallpapers = [
   "",

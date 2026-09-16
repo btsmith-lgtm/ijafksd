@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Trophy, Gamepad2, Film, Music2, ShieldAlert, Megaphone, ShieldCheck } from "lucide-react";
+import { Trophy, Gamepad2, Film, Music2, ShieldAlert, Search, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { formatDuration, useLeaderboard } from "@/lib/usage";
 import {
@@ -33,6 +33,7 @@ export function LeaderboardView() {
   const [duration, setDuration] = useState<string>("60");
   const [customMinutes, setCustomMinutes] = useState("");
   const [banMessage, setBanMessage] = useState("");
+  const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -79,6 +80,14 @@ export function LeaderboardView() {
   const grandTotal = entries.reduce((s, e) => s + e.total, 0);
   const todayTotal = entries.reduce((s, e) => s + e.today, 0);
 
+  const q = search.trim().toLowerCase();
+  const visible = q
+    ? entries.filter((e) =>
+        (e.displayName?.trim() || e.username).toLowerCase().includes(q) ||
+        e.username.toLowerCase().includes(q),
+      )
+    : entries;
+
   const myIndex = entries.findIndex((e) => e.userId === meId);
   const me = myIndex >= 0 ? entries[myIndex] : null;
   const ahead = myIndex > 0 ? entries[myIndex - 1] : null;
@@ -96,22 +105,12 @@ export function LeaderboardView() {
           </p>
         </div>
 
-        {notice.trim() && (
-          <div
-            className="glass flex items-start gap-3 rounded-2xl p-4 ring-1 ring-primary/50"
-            style={{ borderRadius: "var(--radius)" }}
-          >
-            <Megaphone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-            <p className="whitespace-pre-wrap text-sm">{notice}</p>
-          </div>
-        )}
-
         {isAdmin && (
           <div className="glass rounded-2xl p-5" style={{ borderRadius: "var(--radius)" }}>
             <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5 text-primary" /> Admin tools
             </div>
-            <label className="mt-3 block text-sm font-medium">Leaderboard message</label>
+            <label className="mt-3 block text-sm font-medium">Broadcast message</label>
             <textarea
               value={noticeDraft}
               onChange={(e) => {
@@ -157,7 +156,7 @@ export function LeaderboardView() {
               </button>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Use the Ban button on anyone below to block them for any length of time.
+              A posted message covers everyone's screen until you clear it. Use the Ban button below to block someone for any length of time.
             </p>
           </div>
         )}
@@ -195,8 +194,19 @@ export function LeaderboardView() {
           </div>
         )}
 
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search people…"
+            className="w-full rounded-xl bg-white/[0.05] py-2.5 pl-10 pr-3 text-sm outline-none ring-1 ring-white/10 focus:ring-primary"
+          />
+        </div>
+
         <div className="flex flex-col gap-3">
-          {entries.map((e, i) => {
+          {visible.map((e) => {
+            const i = entries.findIndex((x) => x.userId === e.userId);
             const name = e.displayName?.trim() || e.username;
             const isMe = e.userId === meId;
             const banned = isBanActive(e.bannedUntil);
