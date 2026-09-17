@@ -259,6 +259,26 @@ function AccountSection({ session }: { session: Session | null }) {
           </button>
         </form>
       </Group>
+
+      <Group title="Session">
+        <p className="text-xs text-muted-foreground">
+          Signed in as {profile?.username ?? user.email}. Signing out returns you to the sign-in screen.
+        </p>
+        <button
+          onClick={async () => {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+              toast.error("Couldn't sign out");
+            } else {
+              toast.success("Signed out");
+            }
+          }}
+          className="flex items-center gap-2 rounded-xl border border-destructive/40 px-4 py-2 text-sm text-destructive transition-colors hover:bg-destructive/10"
+        >
+          <LogOut className="h-4 w-4" />
+          Log out
+        </button>
+      </Group>
     </div>
   );
 }
