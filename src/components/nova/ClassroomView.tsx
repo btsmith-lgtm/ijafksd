@@ -8,6 +8,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useProxySrc } from "@/lib/scramjet";
 import { FullscreenButton } from "./FullscreenButton";
+import cover_bo1z from "@/assets/nova-games/cover-bo1z.jpg.asset.json";
+import cover_moon from "@/assets/nova-games/cover-moon.jpg.asset.json";
+import cover_kino from "@/assets/nova-games/cover-kino.jpg.asset.json";
+import cover_cheese from "@/assets/nova-games/cover-cheese.jpg.asset.json";
+import cover_bo2 from "@/assets/nova-games/cover-bo2.jpg.asset.json";
+import cover_mw2 from "@/assets/nova-games/cover-mw2.jpg.asset.json";
+import cover_gta5 from "@/assets/nova-games/cover-gta5.jpg.asset.json";
+import cover_halo from "@/assets/nova-games/cover-halo.jpg.asset.json";
+import cover_halomobile from "@/assets/nova-games/cover-halomobile.jpg.asset.json";
+import cover_quake1 from "@/assets/nova-games/cover-quake1.jpg.asset.json";
+import cover_quake2 from "@/assets/nova-games/cover-quake2.jpg.asset.json";
+import cover_quake3 from "@/assets/nova-games/cover-quake3.jpg.asset.json";
+import cover_rtcw from "@/assets/nova-games/cover-rtcw.jpg.asset.json";
+import cover_ut from "@/assets/nova-games/cover-ut.jpg.asset.json";
+import cover_hl from "@/assets/nova-games/cover-hl.jpg.asset.json";
+import cover_cs16 from "@/assets/nova-games/cover-cs16.jpg.asset.json";
+import imgSkateRust from "@/assets/nova-games/skaterust.jpg";
+import imgCsSurf from "@/assets/nova-games/cssurf.jpg";
+import imgHedgewars from "@/assets/nova-games/hedgewars.jpg";
+import imgWasm from "@/assets/nova-games/wasm.jpg";
 
 
 const MENU_TABS = [
@@ -21,29 +41,30 @@ const MENU_TABS = [
 ] as const;
 
 const NOVA_GAMES = [
-  { name: "COD Zombies (BO1)", url: "https://vel.gg/bo1z" },
-  { name: "Moon", url: "https://moon-zombies.pages.dev" },
-  { name: "Kino der Toten", url: "https://kino-der-toten.pages.dev" },
-  { name: "BO3 Cheese Cube", url: "https://cheese-cube.pages.dev" },
-  { name: "Black Ops 2", url: "https://vibeslops.luckeysystems.com" },
-  { name: "Modern Warfare 2", url: "https://ovz-game-production.up.railway.app" },
-  { name: "Skate 3", url: "https://skate.aaddpp.lol" },
-  { name: "Skate Rust", url: "https://global-terror.net" },
-  { name: "CS Surf", url: "https://surfd.net" },
-  { name: "Halo CE", url: "https://mitchellhynes.com/halo" },
-  { name: "Halo CE Mobile", url: "https://hcemobile.com" },
-  { name: "PES 6", url: "https://pes6.optijuegos.net" },
-  { name: "The Simpsons: Hit & Run", url: "https://shar-wasm.cjoseph.workers.dev/?skipmovie" },
-  { name: "Quake 1", url: "https://q1.pieter.com" },
-  { name: "Quake 2", url: "https://q2.pieter.com" },
-  { name: "Quake 3", url: "https://q3.pieter.com" },
-  { name: "Return to Castle Wolfenstein", url: "https://rtcw.pieter.com" },
-  { name: "Unreal Tournament", url: "https://ut.pieter.com" },
-  { name: "Half Life", url: "https://pixelsuft.github.io/hl/" },
-  { name: "Half Life / CS 1.6", url: "https://x8bitrain.github.io/webXash/" },
-  { name: "Diablo", url: "https://johnimril.github.io/diablo_web/" },
-  { name: "Hedgewars", url: "https://webwars.link" },
-  { name: "More GTA / Minecraft", url: "https://wasmarcade.com" },
+  { name: "COD Zombies (BO1)", url: "https://vel.gg/bo1z", image: cover_bo1z.url },
+  { name: "Moon", url: "https://moon-zombies.pages.dev", image: cover_moon.url },
+  { name: "Kino der Toten", url: "https://kino-der-toten.pages.dev", image: cover_kino.url },
+  { name: "BO3 Cheese Cube", url: "https://cheese-cube.pages.dev", image: cover_cheese.url },
+  { name: "Black Ops 2", url: "https://vibeslops.luckeysystems.com", image: cover_bo2.url },
+  { name: "Modern Warfare 2", url: "https://ovz-game-production.up.railway.app", image: cover_mw2.url },
+  { name: "GTA 5", url: "https://web.archive.org/web/20261005232456/https://playgta5.com/", image: cover_gta5.url },
+  { name: "Skate 3", url: "https://skate.aaddpp.lol", image: "https://upload.wikimedia.org/wikipedia/en/8/84/Skate-3-Boxart.jpg" },
+  { name: "Skate Rust", url: "https://global-terror.net", image: imgSkateRust },
+  { name: "CS Surf", url: "https://surfd.net", image: imgCsSurf },
+  { name: "Halo CE", url: "https://mitchellhynes.com/halo", image: cover_halo.url },
+  { name: "Halo CE Mobile", url: "https://hcemobile.com", image: cover_halomobile.url },
+  { name: "PES 6", url: "https://pes6.optijuegos.net", image: "https://upload.wikimedia.org/wikipedia/en/0/0f/PES6.jpg" },
+  { name: "The Simpsons: Hit & Run", url: "https://shar-wasm.cjoseph.workers.dev/?skipmovie", image: "https://upload.wikimedia.org/wikipedia/en/5/5f/The_Simpsons_Hit_and_Run_cover.png" },
+  { name: "Quake 1", url: "https://q1.pieter.com", image: cover_quake1.url },
+  { name: "Quake 2", url: "https://q2.pieter.com", image: cover_quake2.url },
+  { name: "Quake 3", url: "https://q3.pieter.com", image: cover_quake3.url },
+  { name: "Return to Castle Wolfenstein", url: "https://rtcw.pieter.com", image: cover_rtcw.url },
+  { name: "Unreal Tournament", url: "https://ut.pieter.com", image: cover_ut.url },
+  { name: "Half Life", url: "https://pixelsuft.github.io/hl/", image: cover_hl.url },
+  { name: "Half Life / CS 1.6", url: "https://x8bitrain.github.io/webXash/", image: cover_cs16.url },
+  { name: "Diablo", url: "https://johnimril.github.io/diablo_web/", image: "https://upload.wikimedia.org/wikipedia/en/3/3a/Diablo_Coverart.png" },
+  { name: "Hedgewars", url: "https://webwars.link", image: imgHedgewars },
+  { name: "More GTA / Minecraft", url: "https://wasmarcade.com", image: imgWasm },
 ];
 
 const BUTTON_TABS = [
@@ -138,9 +159,16 @@ export function ClassroomView() {
                 <button
                   key={g.url}
                   onClick={() => setNovaGame(g)}
-                  className="rounded-xl bg-secondary/50 px-4 py-4 text-left text-sm font-medium transition-colors hover:bg-secondary"
+                  className="group overflow-hidden rounded-xl bg-secondary/50 text-left text-sm font-medium transition-colors hover:bg-secondary"
                 >
-                  {g.name}
+                  <img
+                    src={g.image}
+                    alt={g.name}
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="truncate px-3 py-2">{g.name}</div>
                 </button>
               ))}
             </div>
