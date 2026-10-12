@@ -34,7 +34,7 @@ const MENU_TABS = [
   { id: "selenite", label: "Selenite", url: "https://selenite.cc/projects.html" },
   { id: "strictly", label: "Strictly Math", url: "https://strictlymath.cc" },
   { id: "studysync", label: "StudySync", url: "https://studysync.co.uk/" },
-  { id: "cinesteam", label: "PC Games", url: "https://ghostcloud-eight.vercel.app" },
+  { id: "cinesteam", label: "PC Games", url: "https://ixlisfun.b-cdn.net" },
   { id: "genizymath", label: "Genizy Math", url: "https://genizymath.github.io" },
   { id: "quackprep", label: "QuackPrep", url: "https://quackprep.org" },
   { id: "dubdoo", label: "Dubdoo", url: "https://dubdoo.com" },
