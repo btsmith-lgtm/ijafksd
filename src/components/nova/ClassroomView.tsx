@@ -48,6 +48,7 @@ const NOVA_GAMES = [
   { name: "Black Ops 2", url: "https://vibeslops.luckeysystems.com", image: cover_bo2.url },
   { name: "Modern Warfare 2", url: "https://ovz-game-production.up.railway.app", image: cover_mw2.url },
   { name: "GTA 5", url: "https://web.archive.org/web/20261005232456/https://playgta5.com/", image: cover_gta5.url },
+  { name: "Mario Kart 8", url: "https://ixlisfun.b-cdn.net", image: "https://upload.wikimedia.org/wikipedia/en/b/b5/MarioKart8Boxart.jpg" },
   { name: "Skate 3", url: "https://skate.aaddpp.lol", image: "https://upload.wikimedia.org/wikipedia/en/8/84/Skate-3-Boxart.jpg" },
   { name: "Skate Rust", url: "https://global-terror.net", image: imgSkateRust },
   { name: "CS Surf", url: "https://surfd.net", image: imgCsSurf },
