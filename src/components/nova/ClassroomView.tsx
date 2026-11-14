@@ -34,7 +34,7 @@ const MENU_TABS = [
   { id: "selenite", label: "Selenite", url: "https://selenite.cc/projects.html" },
   { id: "strictly", label: "Strictly Math", url: "https://strictlymath.cc" },
   { id: "studysync", label: "StudySync", url: "https://studysync.co.uk/" },
-  { id: "cinesteam", label: "PC Games", url: "https://ixlisfun.b-cdn.net" },
+  { id: "cinesteam", label: "PC Games", url: "https://ghost-mathmulti.zeoghost.workers.dev" },
   { id: "genizymath", label: "Genizy Math", url: "https://genizymath.github.io" },
   { id: "quackprep", label: "QuackPrep", url: "https://quackprep.org" },
   { id: "dubdoo", label: "Dubdoo", url: "https://dubdoo.com" },
@@ -70,6 +70,7 @@ const NOVA_GAMES = [
 
 const BUTTON_TABS = [
   { id: "novagames", label: "Nova Games", url: "" },
+  { id: "ghostgames", label: "Ghost Games", url: "https://play.ghostmath.workers.dev" },
   { id: "fortnite", label: "Fortnite", url: "https://play.geforcenow.com/games?game-id=46bfab06-d864-465d-9e56-2d9e45cdee0a&lang=en_US&asset-id=01_9b412ae4-1af5-4a5a-b560-20632b95106a" },
   { id: "minecraft", label: "Minecraft", url: "https://4texas4.github.io/EaglyMC" },
   { id: "nowgg-10011", label: "Stumble Guys", url: "https://nowgg.fun/apps/a/10011/b.html" },
